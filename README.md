@@ -32,3 +32,6 @@ shields.io website for badges
 [![LICENSE](https://img.shields.io/github/license/Tesolite/sem.svg?style=flat-square)](https://github.com/<github-username>/sem/blob/master/LICENSE)
 
 [![Releases](https://img.shields.io/github/release/Tesolite/sem/all.svg?style=flat-square)](https://github.com/<github-username>/sem/releases)
+
+#Software Engineering Methods
+![GitHub Workflow Status (branch)](https://img.shields.io/github/workflow/status/Tesolite/sem/main.yml/develop?style=flat-square)
