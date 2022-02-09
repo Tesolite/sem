@@ -15,3 +15,4 @@ system.out.println("hello");
 for(int i = 0; i < 10; i++);
 ```
 - [ ] am I sexy?
+- [x] CI workflow is working on PC
