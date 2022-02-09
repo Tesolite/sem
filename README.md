@@ -25,4 +25,4 @@ public class Testing {
 - [x] CI workflow is working on laptop
 - testing again
 
-![workflow](https://github.com/<UserName>/<RepositoryName>/actions/workflows/main.yml/badge.svg)
+![workflow](https://github.com/Tesolite/sem/actions/workflows/main.yml/badge.svg)
