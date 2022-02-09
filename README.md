@@ -25,4 +25,10 @@ public class Testing {
 - [x] CI workflow is working on laptop
 - testing again
 
+shields.io website for badges
+
 ![workflow](https://github.com/Tesolite/sem/actions/workflows/main.yml/badge.svg)
+
+[![LICENSE](https://img.shields.io/github/license/Tesolite/sem.svg?style=flat-square)](https://github.com/<github-username>/sem/blob/master/LICENSE)
+
+[![Releases](https://img.shields.io/github/release/Tesolite/sem/all.svg?style=flat-square)](https://github.com/<github-username>/sem/releases)
