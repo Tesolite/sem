@@ -79,7 +79,7 @@ public class App
         // Connect to database
         a.connect();
 
-        // Disconnect from database
+        // Disconnect from database //
         a.disconnect();
     }
 }
