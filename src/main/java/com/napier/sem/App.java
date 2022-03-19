@@ -91,7 +91,7 @@ public class App {
                             + emp.last_name + "\n"
                             + emp.title + "\n"
                             + "Salary:" + emp.salary + "\n"
-                            + emp.dept_name + "\n"
+                            + emp.dept + "\n"
                             + "Manager: " + emp.manager + "\n");
         }
     }
@@ -133,11 +133,11 @@ public class App {
     }
 
     /**
-     * Gets the salaries of employees in Engineer department.
+     * Gets the salaries of employees who are Engineers.
      *
-     * @return a list of salaries of employees in Engineer department, or null if there is an error.
+     * @return a list of salaries of employees with Engineer role, or null if there is an error.
      */
-    public ArrayList<Employee> getDeptSalaries() {
+    public ArrayList<Employee> getRoleSalaries() {
         try {
             // Create an SQL statement
             Statement stmt = con.createStatement();
@@ -172,16 +172,83 @@ public class App {
     }
 
     /**
+     * Gets the salaries of employees in a specific department.
+     *
+     * @return a list of salaries of employees within a department, or null if there is an error.
+     */
+    public ArrayList<Employee> getDepartmentSalaries(Department dept) {
+        try {
+            // Create an SQL statement
+            Statement stmt = con.createStatement();
+            // Create string for SQL statement
+            String strSelect =
+                    "SELECT employees.emp_no, employees.first_name, employees.last_name, salaries.salary\n" +
+                            "FROM employees, salaries, dept_emp, departments\n" +
+                            "WHERE employees.emp_no = salaries.emp_no\n" +
+                            "AND employees.emp_no = dept_emp.emp_no\n" +
+                            "AND dept_emp.dept_no = departments.dept_no\n" +
+                            "AND salaries.to_date = '9999-01-01'\n" +
+                            "AND departments.dept_no = " + "\'" + dept.dept_no + "\'" + "\n" +
+                            "ORDER BY employees.emp_no ASC";
+            // Execute SQL statement
+            ResultSet rset = stmt.executeQuery(strSelect);
+            // Extract employee information
+            ArrayList<Employee> employees = new ArrayList<Employee>();
+            while (rset.next()) {
+                Employee emp = new Employee();
+                emp.emp_no = rset.getInt("employees.emp_no");
+                emp.first_name = rset.getString("employees.first_name");
+                emp.last_name = rset.getString("employees.last_name");
+                emp.salary = rset.getInt("salaries.salary");
+                employees.add(emp);
+            }
+            return employees;
+        } catch (Exception e) {
+            System.out.println(e.getMessage());
+            System.out.println("Failed to get salary details");
+            return null;
+        }
+    }
+
+
+    public Department getDepartment(String dept_name) {
+        try {
+            // Create an SQL statement
+            Statement stmt = con.createStatement();
+            // Create string for SQL statement
+            String strSelect =
+                    "SELECT dept_no, dept_name "
+                            + "FROM departments "
+                            + "WHERE dept_name = \'" + dept_name + "\'";
+            // Execute SQL statement
+            ResultSet rset = stmt.executeQuery(strSelect);
+            // Return new department if valid.
+            // Check one is returned
+            if (rset.next()) {
+                Department dept = new Department();
+                dept.dept_no = rset.getString("dept_no");
+                dept.dept_name = rset.getString("dept_name");
+                System.out.println("Successfully saved department.");
+                return dept;
+            } else
+                return null;
+        } catch (Exception e) {
+            System.out.println(e.getMessage());
+            System.out.println("Failed to get employee details");
+            return null;
+        }
+    }
+
+    /**
      * Prints a list of employees.
+     *
      * @param employees The list of employees to print.
      */
-    public void printSalaries(ArrayList<Employee> employees)
-    {
+    public void printSalaries(ArrayList<Employee> employees) {
         // Print header
         System.out.println(String.format("%-10s %-15s %-20s %-8s", "Emp No", "First Name", "Last Name", "Salary"));
         // Loop over all employees in the list
-        for (Employee emp : employees)
-        {
+        for (Employee emp : employees) {
             String emp_string =
                     String.format("%-10s %-15s %-20s %-8s",
                             emp.emp_no, emp.first_name, emp.last_name, emp.salary);
@@ -199,7 +266,7 @@ public class App {
 
         // Extract employee salary information
         ArrayList<Employee> employees = a.getAllSalaries();
-        ArrayList<Employee> employeesEngineer = a.getDeptSalaries();
+        ArrayList<Employee> employeesEngineer = a.getRoleSalaries();
 
         // Test the size of the returned data - should be 240124
         System.out.println(employees.size());
@@ -207,9 +274,14 @@ public class App {
         System.out.println(employeesEngineer.size());
 
         //Print out all Engineer employees
-            a.printSalaries(employeesEngineer);
+        a.printSalaries(employeesEngineer);
+        System.out.println("-----------------------------------------------");
 
+        //Print out all salaries in Sales department
+       a.printSalaries( a.getDepartmentSalaries(a.getDepartment("Sales")));
+        a.displayEmployee(a.getEmployee(499999));
         // Disconnect from database
         a.disconnect();
     }
 }
+
